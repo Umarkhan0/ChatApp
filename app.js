@@ -1,35 +1,54 @@
-var users = document.querySelectorAll(".uer-pro");
-users.forEach(function (element) {
-    element.addEventListener("click", function () {
-        var blockcontainer = document.querySelector(".block-container");
-        blockcontainer.style.display = "none";
-        var chatContainer = document.querySelector(".chat-container");
-        chatContainer.style.display = "block";
-        chatContainer.innerHTML = "\n        <div class=\"fiexed\">\n        <header class=\"header\">\n        <div class=\"profile-image-name\">\n<span id=\"back-btn\"> < </span>\n<img class=\"profile-image\" height=\"40px\" src=\"https://tse3.mm.bing.net/th?id=OIP.puMo9ITfruXP8iQx9cYcqwHaGJ&pid=Api&P=0&h=180\" alt=\"\">\n<span>Name</span>\n        </div>\n</div>\n    </header>\n    <div class=\"messge-print-sec\">\n    <p>nurcnudcewr</p>\n    </div>\n    <div class=\"messge-print\" id=\"sent-messege\">\n    \n   \n\n    </div>\n   \n    <div class=\"input-container\">\n    <input type=\"text\" class=\"messege-type\">\n    <img class=\"sent-btn\" height=\"40px\" src=\"https://www.kindpng.com/picc/m/150-1509137_send-message-whatsapp-send-icon-png-transparent-png.png\" alt=\"\">\n    </div>\n        ";
-        var backBtn = document.querySelector("#back-btn");
-        backBtn.addEventListener("click", function () {
-            chatContainer.style.display = "none";
-            blockcontainer.style.display = "block";
-        });
-        var sentBtn = document.querySelector(".sent-btn");
-        var messege = document.querySelector(".messege-type");
-        sentBtn.addEventListener("click", function () {
-            var sentMessege = document.querySelector("#sent-messege");
-            sentMessege.innerHTML += "\n       <p> ".concat(messege.value, "</p>\n        ");
-            console.log(messege.value);
-
-            const element = document.querySelector('.messge-print');
-
-            // Function to scroll to the bottom of the element
-            function scrollToBottom() {
-              element.scrollTop = element.scrollHeight;
-            }
-            
-            // Scroll to the bottom initially
-            scrollToBottom();
-            
-           
-
-        });
-    });
+let navbar = document.querySelector(".nav-icon");
+let header = document.querySelector(".header");
+let logo = document.querySelector(".logo");
+let navBtn = document.querySelector(".btn");
+let overflow = document.querySelector(".overflow");
+let responsiveNavbar = document.querySelector(".responsive-navbar")
+let isExpanded = false;
+const originalHeaderHeight = header.style.height;
+console.log(originalHeaderHeight)
+navbar.addEventListener("click", () => {
+  if (isExpanded) {
+    header.style.height = originalHeaderHeight;
+    navBtn.style.marginTop = "10px";
+    logo.style.marginTop = "10px";
+    responsiveNavbar.style.display = "none"
+  } else {
+    header.style.alignItems = "unset"
+    header.style.height = "250px"
+    header.style.transition = "0ms"
+    navBtn.style.marginTop = "20px";
+    logo.style.marginTop = "20px";
+    console.log(responsiveNavbar)
+    responsiveNavbar.style.display = "block"
+    responsiveNavbar.innerHTML = `
+    <div class="colum">
+        <button class="home-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-house-door-fill icon" viewBox="0 0 16 16">
+                <path
+                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+            </svg>
+            <span class="btn-text">
+                Home
+            </span></button>
+        <span class="btn-text margin mt-3">
+            Custom
+        </span>
+        <button class="home-btn mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="icon bi bi-person-fill-lock margin" viewBox="0 0 16 16">
+                <path
+                    d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z" />
+            </svg><span class="btn-text">
+                Restricted
+            </span>
+        </button>
+        <button class="sign-btn mt-3">
+            SIGN IN
+        </button>
+        </div> 
+    `
+  }
+  isExpanded = !isExpanded;
 });
