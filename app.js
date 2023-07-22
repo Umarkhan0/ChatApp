@@ -2,26 +2,26 @@ let navbar = document.querySelector(".nav-icon");
 let header = document.querySelector(".header");
 let logo = document.querySelector(".logo");
 let navBtn = document.querySelector(".btn");
+let logBtn = document.querySelector(".sign-btn");
 let overflow = document.querySelector(".overflow");
 let responsiveNavbar = document.querySelector(".responsive-navbar")
 let isExpanded = false;
-const originalHeaderHeight = header.style.height;
-console.log(originalHeaderHeight)
-navbar.addEventListener("click", () => {
-  if (isExpanded) {
-    header.style.height = originalHeaderHeight;
-    navBtn.style.marginTop = "10px";
-    logo.style.marginTop = "10px";
-    responsiveNavbar.style.display = "none"
-  } else {
-    header.style.alignItems = "unset"
-    header.style.height = "250px"
-    header.style.transition = "0ms"
-    navBtn.style.marginTop = "20px";
-    logo.style.marginTop = "20px";
-    console.log(responsiveNavbar)
-    responsiveNavbar.style.display = "block"
-    responsiveNavbar.innerHTML = `
+const originalHeaderHeight = "";
+navbar && navbar.addEventListener("click", () => {
+    if (isExpanded) {
+        header.style.height = originalHeaderHeight;
+        navBtn.style.marginTop = "10px";
+        logo.style.marginTop = "10px";
+        responsiveNavbar.style.display = "none"
+    } else {
+        header.style.alignItems = "unset"
+        header.style.height = "250px"
+        header.style.transition = "0ms"
+        navBtn.style.marginTop = "20px";
+        logo.style.marginTop = "20px";
+        console.log(responsiveNavbar)
+        responsiveNavbar.style.display = "block"
+        responsiveNavbar.innerHTML = `
     <div class="colum">
         <button class="home-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -44,11 +44,42 @@ navbar.addEventListener("click", () => {
                 Restricted
             </span>
         </button>
-        <button class="sign-btn mt-3">
+        <button class="sign-btn sign-btn2 mt-3">
             SIGN IN
         </button>
         </div> 
     `
-  }
-  isExpanded = !isExpanded;
+    }
+    isExpanded = !isExpanded;
+    let logBtn2 = document.querySelector(".sign-btn2")
+    logBtn2 && logBtn2.addEventListener("click", () => {
+        window.location.assign("/login.html");
+    })
 });
+
+logBtn && logBtn.addEventListener("click", () => {
+    window.location.assign("/login.html");
+
+})
+let otherLoginHome = document.querySelector(".other-login-home");
+otherLoginHome && otherLoginHome.addEventListener("click", () => {
+    window.history.back()
+})
+
+let loginBtn = document.querySelector(".login-btn");
+loginBtn && loginBtn.addEventListener("click", () => {
+    let emailInput = document.querySelector(".email-input");
+    let password = document.querySelector(".password-input");
+    !emailInput.value.trim() ? emailInput.style.border = "2px solid red" : emailInput.style.border = "none"
+    !password.value.trim() ? password.style.border = "2px solid red" : password.style.border = "none"
+    if (emailInput.value.trim() && password.value.trim()) {
+        alert()
+    }
+})
+
+
+let craeteAnAccount = document.querySelector(".craete-an-account");
+craeteAnAccount && craeteAnAccount.addEventListener("click",()=>{
+    window.location.assign("regiister.html");
+    
+})
