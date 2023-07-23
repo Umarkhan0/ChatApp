@@ -237,7 +237,8 @@
     color: #fff;
 }
 
-.login-btn {
+.login-btn,
+.register-login-btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -286,7 +287,8 @@
 }
 
 .register-img {
-    height: 500px;
+
+    height: 531px;
     width: 380px;
     background-image: url('/images/register_bg.jpg');
     background-size: cover;
@@ -294,8 +296,9 @@
 }
 
 .register-card {
+
     background-color: #2e353e;
-    height: 500px;
+    min-height: 522px;
     width: 460px;
 }
 
@@ -309,6 +312,7 @@
 .two-input {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .input-name {
@@ -323,6 +327,7 @@
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    flex-wrap: wrap;
     margin-top: 15px;
     width: 88%;
     background-color: #282d36;
@@ -338,7 +343,7 @@
     margin-left: 6%;
     margin-top: 15px;
     color: #fff;
-    width: 200px;
+    max-width: 200px;
     background-color: #282d36;
     padding: 5px;
 }
@@ -354,4 +359,108 @@
     border: none;
     outline: none;
     color: #fff;
+}
+
+#dropdown {
+    outline: none;
+    border: none;
+    height: 30px;
+    width: 75%;
+    color: #fff;
+    cursor: pointer;
+    background-color: #282d36;
+}
+
+.border-option:focus {
+    border: 0px;
+    outline: 0px;
+}
+
+.registration-dropdown,
+.country-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 15px;
+    color: #fff;
+    padding: 5px;
+}
+
+.gender-text-gender,
+.gender-text-countrty {
+    background-color: #282d36;
+    height: 30px;
+    padding: 0px 9px 0px 7px;
+}
+
+.password-input {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}
+
+.get-out {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2c77da;
+    cursor: pointer;
+    margin-bottom: 9px;
+}
+
+.get-out:hover {
+    color: #1647db;
+}
+
+@media screen and (max-width: 357px) {
+    .input-name {
+        margin-top: 9px;
+        width: 90%;
+    }
+}
+
+.drop-gender,
+.drop-gender-country {
+    display: flex;
+    width: 90%;
+}
+
+.dropdown-gender,
+.dropdown-coutry {
+    width: 90% !important;
+}
+
+.strong-password-popop {
+    display: none;
+    color: red;
+    font-size: small;
+    margin-bottom: -11px !important;
+}
+
+.alert-success {
+    position: absolute !important;
+    width: 40%;
+    display: none;
+}
+
+.mailbtn-alert>a:hover {
+    color: #fff !important;
+}
+
+.mailbtn-alert {
+    padding: 4px 16px;
+    background-color: #2e353e;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px #fff;
+}
+
+.mailbtn-alert>a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.mailbtn-alert:active {
+    opacity: 0.5;
 }

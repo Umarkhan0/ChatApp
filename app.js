@@ -1,3 +1,26 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+const firebaseConfig = {
+    apiKey: "AIzaSyC-X4qxyI3jqxYYKdhcmEhWN-luVmQIWx4",
+    authDomain: "chat-app-b4dc9.firebaseapp.com",
+    databaseURL: "https://chat-app-b4dc9-default-rtdb.firebaseio.com",
+    projectId: "chat-app-b4dc9",
+    storageBucket: "chat-app-b4dc9.appspot.com",
+    messagingSenderId: "497866186228",
+    appId: "1:497866186228:web:72cfbc46e6211c6d91ada1",
+    measurementId: "G-VMSVHN1N1H"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+
 let navbar = document.querySelector(".nav-icon");
 let header = document.querySelector(".header");
 let logo = document.querySelector(".logo");
@@ -79,7 +102,101 @@ loginBtn && loginBtn.addEventListener("click", () => {
 
 
 let craeteAnAccount = document.querySelector(".craete-an-account");
-craeteAnAccount && craeteAnAccount.addEventListener("click",()=>{
+craeteAnAccount && craeteAnAccount.addEventListener("click", () => {
     window.location.assign("regiister.html");
-    
+
+})
+
+let form = document.getElementById("submit-btn");
+// console.log(form)
+form && form.addEventListener("click", (event) => {
+    event.preventDefault();
+    let inputName = document.querySelector(".input-name");
+    let birthdayInput = document.querySelector(".birthday-input");
+    let dropdown = document.querySelector(".dropdown-gender");
+    let lastName = document.querySelector(".last-name")
+    let dropdownCoutry = document.querySelector(".dropdown-coutry");
+    let rigisterInput = document.querySelector(".rigister-input")
+    let password = document.querySelector(".password");
+    let reInterPassword = document.querySelector(".re-inter-password");
+    let birthday = document.querySelector(".birthday");
+    let registrationDropdownDiv = document.querySelector(".drop-gender");
+    let genderTextCountrty = document.querySelector(".drop-gender-country");
+    let alertSuccess = document.querySelector(".alert-success")
+    // let smaePassword = password , reInterPassword
+    !inputName.value.trim() ? inputName.style.border = "1px solid red" : inputName.style.border = "none";
+    !birthdayInput.value.trim() ? birthday.style.border = "1px solid red" : birthday.style.border = "none";
+    !lastName.value.trim() ? lastName.style.border = "1px solid red" : lastName.style.border = "none"
+    !rigisterInput.value.trim() ? rigisterInput.style.border = "1px solid red" : rigisterInput.style.border = "none"
+    !dropdown.value.trim() ? registrationDropdownDiv.style.border = "1px solid red" : registrationDropdownDiv.style.border = "none"
+    !dropdownCoutry.value.trim() ? genderTextCountrty.style.border = "1px solid red" : genderTextCountrty.style.border = "none"
+    !password.value.trim() ? password.style.border = "1px solid red" : password.style.border = "none"
+    !reInterPassword.value.trim() ? reInterPassword.style.border = "1px solid red" : reInterPassword.style.border = "none"
+    let strongPasswordPopop = document.querySelector(".strong-password-popop")
+    let emailPattern = /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
+    emailPattern.test(rigisterInput.value) ?
+        password.value == reInterPassword.value ?
+            inputName.value.trim() && birthdayInput.value.trim() && lastName.value.trim() && dropdown.value.trim() && dropdownCoutry.value.trim() &&
+                password.value.trim() && reInterPassword.value.trim() ?
+
+                createUserWithEmailAndPassword(auth, rigisterInput.value, reInterPassword.value)
+                    .then(async (userCredential) => {
+
+                        const user = userCredential.user;
+                        console.log(user.uid)
+
+                        // const auth = getAuth();
+                        sendEmailVerification(auth.currentUser)
+                            .then(() => {
+                                // Email verification sent!
+                                // ...
+                                alertSuccess.style.display = "block"
+
+
+                            })
+                        // await setDoc(doc(db, inputName.value, user.uid), {
+                        //     name: inputName.value + lastName.value,
+                        //     email: email.value
+                        //   });
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                        // ...
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.log(errorMessage)
+                        errorMessage == "Firebase: Password should be at least 6 characters (auth/weak-password)." ?
+                            strongPasswordPopop.style.display = "block" : "ok"
+                        errorMessage == "Firebase: Error (auth/invalid-email)." ?
+                            rigisterInput.style.border = "1px solid red" :
+                            "h"
+                        errorMessage == "Firebase: Error (auth/email-already-in-use)." ?
+                            swal({
+                                text: "Already use Email",
+                            }) : "continue"
+                    })
+
+
+                : ""
+            : reInterPassword.style.border = "1px solid red"
+        : rigisterInput.style.border = "1px solid red"
+})
+
+let backAlready = document.querySelector(".already");
+backAlready && backAlready.addEventListener("click", () => {
+    window.history.back();
+
 })
