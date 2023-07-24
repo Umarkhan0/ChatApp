@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyC-X4qxyI3jqxYYKdhcmEhWN-luVmQIWx4",
     authDomain: "chat-app-b4dc9.firebaseapp.com",
@@ -13,12 +13,10 @@ const firebaseConfig = {
     appId: "1:497866186228:web:72cfbc46e6211c6d91ada1",
     measurementId: "G-VMSVHN1N1H"
 };
-
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 
 
 let navbar = document.querySelector(".nav-icon");
@@ -26,6 +24,7 @@ let header = document.querySelector(".header");
 let logo = document.querySelector(".logo");
 let navBtn = document.querySelector(".btn");
 let logBtn = document.querySelector(".sign-btn");
+let logBtnName = document.querySelector(".sign-btn2")
 let overflow = document.querySelector(".overflow");
 let responsiveNavbar = document.querySelector(".responsive-navbar")
 let isExpanded = false;
@@ -36,7 +35,8 @@ navbar && navbar.addEventListener("click", () => {
         navBtn.style.marginTop = "10px";
         logo.style.marginTop = "10px";
         responsiveNavbar.style.display = "none"
-    } else {
+    }
+    else {
         header.style.alignItems = "unset"
         header.style.height = "250px"
         header.style.transition = "0ms"
@@ -44,159 +44,239 @@ navbar && navbar.addEventListener("click", () => {
         logo.style.marginTop = "20px";
         console.log(responsiveNavbar)
         responsiveNavbar.style.display = "block"
-        responsiveNavbar.innerHTML = `
-    <div class="colum">
-        <button class="home-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-house-door-fill icon" viewBox="0 0 16 16">
-                <path
-                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
-            </svg>
-            <span class="btn-text">
-                Home
-            </span></button>
-        <span class="btn-text margin mt-3">
-            Custom
-        </span>
-        <button class="home-btn mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="icon bi bi-person-fill-lock margin" viewBox="0 0 16 16">
-                <path
-                    d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z" />
-            </svg><span class="btn-text">
-                Restricted
-            </span>
-        </button>
-        <button class="sign-btn sign-btn2 mt-3">
-            SIGN IN
-        </button>
-        </div> 
-    `
     }
     isExpanded = !isExpanded;
-    let logBtn2 = document.querySelector(".sign-btn2")
+    let logBtn2 = document.querySelector(".sign-btn2");
     logBtn2 && logBtn2.addEventListener("click", () => {
         window.location.assign("/login.html");
-    })
+    });
 });
-
 logBtn && logBtn.addEventListener("click", () => {
     window.location.assign("/login.html");
-
-})
+});
 let otherLoginHome = document.querySelector(".other-login-home");
 otherLoginHome && otherLoginHome.addEventListener("click", () => {
     window.history.back()
-})
-
+});
 let loginBtn = document.querySelector(".login-btn");
 loginBtn && loginBtn.addEventListener("click", () => {
     let emailInput = document.querySelector(".email-input");
     let password = document.querySelector(".password-input");
-    !emailInput.value.trim() ? emailInput.style.border = "2px solid red" : emailInput.style.border = "none"
-    !password.value.trim() ? password.style.border = "2px solid red" : password.style.border = "none"
-    if (emailInput.value.trim() && password.value.trim()) {
+    !emailInput.value.trim()
+        ?
+        emailInput.style.border = "2px solid red"
+        :
+        emailInput.style.border = "none"
+    !password.value.trim()
+        ?
+        password.style.border = "2px solid red"
+        :
+        password.style.border = "none"
+    if
+        (emailInput.value.trim()
+        &&
+        password.value.trim()) {
         alert()
     }
-})
-
-
+});
 let craeteAnAccount = document.querySelector(".craete-an-account");
 craeteAnAccount && craeteAnAccount.addEventListener("click", () => {
     window.location.assign("regiister.html");
-
-})
-
+});
 let form = document.getElementById("submit-btn");
-// console.log(form)
-form && form.addEventListener("click", (event) => {
-    event.preventDefault();
-    let inputName = document.querySelector(".input-name");
-    let birthdayInput = document.querySelector(".birthday-input");
-    let dropdown = document.querySelector(".dropdown-gender");
-    let lastName = document.querySelector(".last-name")
-    let dropdownCoutry = document.querySelector(".dropdown-coutry");
-    let rigisterInput = document.querySelector(".rigister-input")
-    let password = document.querySelector(".password");
-    let reInterPassword = document.querySelector(".re-inter-password");
-    let birthday = document.querySelector(".birthday");
-    let registrationDropdownDiv = document.querySelector(".drop-gender");
-    let genderTextCountrty = document.querySelector(".drop-gender-country");
-    let alertSuccess = document.querySelector(".alert-success")
-    // let smaePassword = password , reInterPassword
-    !inputName.value.trim() ? inputName.style.border = "1px solid red" : inputName.style.border = "none";
-    !birthdayInput.value.trim() ? birthday.style.border = "1px solid red" : birthday.style.border = "none";
-    !lastName.value.trim() ? lastName.style.border = "1px solid red" : lastName.style.border = "none"
-    !rigisterInput.value.trim() ? rigisterInput.style.border = "1px solid red" : rigisterInput.style.border = "none"
-    !dropdown.value.trim() ? registrationDropdownDiv.style.border = "1px solid red" : registrationDropdownDiv.style.border = "none"
-    !dropdownCoutry.value.trim() ? genderTextCountrty.style.border = "1px solid red" : genderTextCountrty.style.border = "none"
-    !password.value.trim() ? password.style.border = "1px solid red" : password.style.border = "none"
-    !reInterPassword.value.trim() ? reInterPassword.style.border = "1px solid red" : reInterPassword.style.border = "none"
-    let strongPasswordPopop = document.querySelector(".strong-password-popop")
-    let emailPattern = /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
-    emailPattern.test(rigisterInput.value) ?
-        password.value == reInterPassword.value ?
-            inputName.value.trim() && birthdayInput.value.trim() && lastName.value.trim() && dropdown.value.trim() && dropdownCoutry.value.trim() &&
-                password.value.trim() && reInterPassword.value.trim() ?
-
-                createUserWithEmailAndPassword(auth, rigisterInput.value, reInterPassword.value)
-                    .then(async (userCredential) => {
-
-                        const user = userCredential.user;
-                        console.log(user.uid)
-
-                        // const auth = getAuth();
-                        sendEmailVerification(auth.currentUser)
-                            .then(() => {
-                                // Email verification sent!
-                                // ...
-                                alertSuccess.style.display = "block"
-
-
-                            })
-                        // await setDoc(doc(db, inputName.value, user.uid), {
-                        //     name: inputName.value + lastName.value,
-                        //     email: email.value
-                        //   });
-
-
-
-
-
-
-
-
-
-
-
-
-                        
-
-                        // ...
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.log(errorMessage)
-                        errorMessage == "Firebase: Password should be at least 6 characters (auth/weak-password)." ?
-                            strongPasswordPopop.style.display = "block" : "ok"
-                        errorMessage == "Firebase: Error (auth/invalid-email)." ?
-                            rigisterInput.style.border = "1px solid red" :
-                            "h"
-                        errorMessage == "Firebase: Error (auth/email-already-in-use)." ?
-                            swal({
-                                text: "Already use Email",
-                            }) : "continue"
-                    })
-
-
-                : ""
-            : reInterPassword.style.border = "1px solid red"
-        : rigisterInput.style.border = "1px solid red"
-})
-
+form
+    &&
+    form.addEventListener("click", (event) => {
+        event.preventDefault();
+        let inputName = document.querySelector(".input-name");
+        let birthdayInput = document.querySelector(".birthday-input");
+        let dropdown = document.querySelector(".dropdown-gender");
+        let lastName = document.querySelector(".last-name")
+        let dropdownCoutry = document.querySelector(".dropdown-coutry");
+        let rigisterInput = document.querySelector(".rigister-input")
+        let password = document.querySelector(".password");
+        let reInterPassword = document.querySelector(".re-inter-password");
+        let birthday = document.querySelector(".birthday");
+        let registrationDropdownDiv = document.querySelector(".drop-gender");
+        let genderTextCountrty = document.querySelector(".drop-gender-country");
+        let alertSuccess = document.querySelector(".alert-success")
+        !inputName.value.trim()
+            ?
+            inputName.style.border = "1px solid red"
+            :
+            inputName.style.border = "none";
+        !birthdayInput.value.trim()
+            ?
+            birthday.style.border = "1px solid red"
+            :
+            birthday.style.border = "none";
+        !lastName.value.trim()
+            ?
+            lastName.style.border = "1px solid red"
+            :
+            lastName.style.border = "none"
+        !rigisterInput.value.trim()
+            ?
+            rigisterInput.style.border = "1px solid red"
+            :
+            rigisterInput.style.border = "none"
+        !dropdown.value.trim()
+            ?
+            registrationDropdownDiv.style.border = "1px solid red"
+            :
+            registrationDropdownDiv.style.border = "none"
+        !dropdownCoutry.value.trim()
+            ?
+            genderTextCountrty.style.border = "1px solid red" : genderTextCountrty.style.border = "none"
+        !password.value.trim()
+            ?
+            password.style.border = "1px solid red"
+            :
+            password.style.border = "none"
+        !reInterPassword.value.trim()
+            ?
+            reInterPassword.style.border = "1px solid red"
+            :
+            reInterPassword.style.border = "none"
+        let strongPasswordPopop = document.querySelector(".strong-password-popop")
+        let emailPattern = /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
+        emailPattern.test(rigisterInput.value)
+            ?
+            password.value == reInterPassword.value
+                ?
+                inputName.value.trim()
+                    &&
+                    birthdayInput.value.trim()
+                    &&
+                    lastName.value.trim()
+                    &&
+                    dropdown.value.trim()
+                    &&
+                    dropdownCoutry.value.trim()
+                    &&
+                    password.value.trim()
+                    &&
+                    reInterPassword.value.trim()
+                    ?
+                    createUserWithEmailAndPassword(auth, rigisterInput.value, reInterPassword.value)
+                        .then(async (userCredential) => {
+                            const user = userCredential.user;
+                            localStorage.setItem("id", user.uid)
+                            localStorage.setItem("name", inputName.value)
+                            await setDoc(doc(db, inputName.value, user.uid), {
+                                name: inputName.value + lastName.value,
+                                email: rigisterInput.value,
+                                birtday: birthdayInput.value,
+                                gender: dropdown.value,
+                                country: dropdownCoutry.value
+                            });
+                        })
+                        .catch(async (error) => {
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            console.log(errorMessage)
+                            errorMessage == "Firebase: Password should be at least 6 characters (auth/weak-password)." ?
+                                strongPasswordPopop.style.display = "block" : "ok"
+                            errorMessage == "Firebase: Error (auth/invalid-email)." ?
+                                rigisterInput.style.border = "1px solid red" :
+                                "h"
+                            errorMessage == "Firebase: Error (auth/email-already-in-use)." ?
+                                swal({
+                                    text: "Already use Email",
+                                }) : "continue"
+                        })
+                    : ""
+                : reInterPassword.style.border = "1px solid red"
+            : rigisterInput.style.border = "1px solid red"
+    })
 let backAlready = document.querySelector(".already");
-backAlready && backAlready.addEventListener("click", () => {
-    window.history.back();
+backAlready
+    &&
+    backAlready.addEventListener("click", () => {
+        window.history.back();
 
-})
+    })
+let userLogoutOption1 = document.querySelector(".user-logout-option1");
+let userLogoutOption2 = document.querySelector(".user-logout-option2");
+let getName = localStorage.getItem("name");
+let getUid = localStorage.getItem("id");
+getName != null ?
+    userLogoutOption1.innerHTML =
+    ` <button class="sign-btn option1 mt-3">
+                          ${getName}
+                      </button>
+                      <div class="more-option2">
+                      `
+    : ""
+getName != null ?
+    userLogoutOption2.innerHTML =
+    ` <button class="sign-btn option1">
+                      ${getName}
+                      </button>
+
+                      <div class="more-option">
+                  `
+    : logBtn.innerHTML =
+    " SIGN IN"
+let opion1 = document.querySelectorAll(".option1");
+opion1.forEach(element => {
+    var checkhogya = false;
+    element.addEventListener("click", () => {
+        let moreOption = document.querySelector(".more-option");
+        if (checkhogya) {
+            moreOption.style.display = "none";
+        }
+        else {
+            moreOption.style.display = "block";
+            moreOption.innerHTML =
+                `
+                <div class="log-container">
+<div class="log-out">
+<button class="profile-text-icon">
+<svg class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+</svg>
+Profile
+</button>
+<br />
+<button class="log-out-text">
+<svg  class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+</svg>
+<span>
+Logout
+</span>
+</div>
+</button>
+</div>
+        `
+        };
+        checkhogya = !checkhogya;
+        let moreOption2 = document.querySelector(".more-option2");
+        if (checkhogya) {
+            moreOption2.style.display = "none"
+        }
+        else {
+            moreOption2.style.display = "block"
+            moreOption2.innerHTML =
+                `
+        <div class="log-out">
+        <button class="profile-text-icon">
+        <svg class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+        </svg>Profile
+        </button>
+        <br />
+        <button class="log-out-text">
+        <svg  class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+        </svg><span>Logout</span>
+        </div>
+        </button>
+                `
+        };
+    });
+});
+
