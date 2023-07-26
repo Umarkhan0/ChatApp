@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-import { getFirestore, collection, doc, getDocs, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-import { getAuth, createUserWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyC-X4qxyI3jqxYYKdhcmEhWN-luVmQIWx4",
     authDomain: "chat-app-b4dc9.firebaseapp.com",
@@ -17,6 +17,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 
 
 let navbar = document.querySelector(".nav-icon");
@@ -76,7 +77,22 @@ loginBtn && loginBtn.addEventListener("click", () => {
         (emailInput.value.trim()
         &&
         password.value.trim()) {
-        alert()
+        let emailSet = emailInput.value.slice(1, 5)
+        signInWithEmailAndPassword(auth, emailInput.value, password.value)
+            .then((userCredential) => {
+
+                const user = userCredential.user;
+                window.location.assign("index.html");
+                localStorage.setItem("id", user.uid)
+                localStorage.setItem("name", `${emailSet}...`)
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorMessage)
+            });
+
     }
 });
 let craeteAnAccount = document.querySelector(".craete-an-account");
@@ -162,9 +178,11 @@ form
                         .then(async (userCredential) => {
                             const user = userCredential.user;
                             localStorage.setItem("id", user.uid)
-                            localStorage.setItem("name", inputName.value)
-                            await setDoc(doc(db, inputName.value, user.uid), {
-                                name: inputName.value + lastName.value,
+                            let saveNameDataBase = rigisterInput.value.slice(0, 4)
+                            localStorage.setItem("name", saveNameDataBase)
+                            await setDoc(doc(db, saveNameDataBase, user.uid), {
+                                name: inputName.value,
+                                lastName: lastName.value,
                                 email: rigisterInput.value,
                                 birtday: birthdayInput.value,
                                 gender: dropdown.value,
@@ -194,21 +212,25 @@ backAlready
     &&
     backAlready.addEventListener("click", () => {
         window.history.back();
-
     })
+
+
+
 let userLogoutOption1 = document.querySelector(".user-logout-option1");
 let userLogoutOption2 = document.querySelector(".user-logout-option2");
-let getName = localStorage.getItem("name");
+let getName = localStorage.getItem("name")
 let getUid = localStorage.getItem("id");
-getName != null ?
+userLogoutOption1 &&
+    getName != null ?
     userLogoutOption1.innerHTML =
     ` <button class="sign-btn option1 mt-3">
-                          ${getName}
+                          ${getName}...
                       </button>
                       <div class="more-option2">
                       `
     : ""
-getName != null ?
+userLogoutOption2 &&
+    getName != null ?
     userLogoutOption2.innerHTML =
     ` <button class="sign-btn option1">
                       ${getName}
@@ -216,33 +238,30 @@ getName != null ?
 
                       <div class="more-option">
                   `
-    : logBtn.innerHTML =
+    :
     " SIGN IN"
 let opion1 = document.querySelectorAll(".option1");
 opion1.forEach(element => {
     var checkhogya = false;
     element.addEventListener("click", () => {
         let moreOption = document.querySelector(".more-option");
-        if (checkhogya) {
-            moreOption.style.display = "none";
-        }
-        else {
-            moreOption.style.display = "block";
-            moreOption.innerHTML =
-                `
-                <div class="log-container">
+        moreOption.innerHTML =
+            `
+        <div class="log-container">
 <div class="log-out">
-<button class="profile-text-icon">
+<button class="profile-text-icon profile-btn">
 <svg class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
 </svg>
+<span>
 Profile
+</span>
 </button>
 <br />
-<button class="log-out-text">
+<button class="log-out-text log-out-user2">
 <svg  class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
 </svg>
 <span>
 Logout
@@ -250,25 +269,30 @@ Logout
 </div>
 </button>
 </div>
-        `
+
+`
+        if (checkhogya) {
+            moreOption.style.display = "none";
+        }
+        else {
+            moreOption.style.display = "block";
+
         };
         checkhogya = !checkhogya;
         let moreOption2 = document.querySelector(".more-option2");
-        if (checkhogya) {
-            moreOption2.style.display = "none"
-        }
-        else {
-            moreOption2.style.display = "block"
-            moreOption2.innerHTML =
-                `
+        moreOption2.innerHTML =
+            `
         <div class="log-out">
-        <button class="profile-text-icon">
+        <button class="profile-text-icon profile-btn">
         <svg class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
           <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
-        </svg>Profile
+        </svg>
+<span>
+        Profile
+        </span>
         </button>
         <br />
-        <button class="log-out-text">
+        <button class="log-out-text log-out-user2">
         <svg  class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -276,7 +300,61 @@ Logout
         </div>
         </button>
                 `
-        };
-    });
-});
+        let btncs = document.querySelectorAll(".log-out-user2");
+        btncs.forEach(elementLogOut => {
+            elementLogOut.addEventListener("click", () => {
+                localStorage.clear();
+                signOut(auth).then(() => {
+                    //    console.log("hogia sign out")
+                    window.location.reload()
+                }).catch((error) => {
+                    // An error happened.
+                });
 
+            });
+
+        });
+        let profileBtn = document.querySelectorAll(".profile-btn");
+        profileBtn.forEach(profileBtnElement => {
+            profileBtnElement.addEventListener("click", async () => {
+
+                window.location.assign("profile.html")
+            });
+        });
+        if (checkhogya) {
+            moreOption2.style.display = "none"
+        }
+        else {
+            moreOption2.style.display = "block"
+
+        };
+
+
+    });
+
+});
+let localNameCollection = localStorage.getItem("name")
+const querySnapshot = await getDocs(collection(db, localNameCollection));
+querySnapshot.forEach((doc) => {
+    // console.log(doc.id, " => ", doc.data());
+    let profileNameInput = document.querySelector(".profile-name-input");
+    let profileBirthdayInput = document.querySelector(".profile-birthday-input");
+    let profileLastName = document.querySelector(".last-name-input");
+    let profileEmailInput = document.querySelector(".profile-email-input");
+    let profileCountryInput = document.querySelector(".country-input");
+    let dropdownGenderProfile = document.querySelector(".dropdown-gender-profile")
+    profileNameInput.value = doc.data().name;
+    profileLastName.value = doc.data().lastName;
+    profileEmailInput.value = doc.data().email;
+    profileBirthdayInput.value = doc.data().birtday;
+    profileCountryInput.value = doc.data().country
+    dropdownGenderProfile.value = doc.data().gender;
+})
+let dmcc = document.querySelector(".input-file")
+let profileImg = document.querySelector("#fileInput");
+profileImg && profileImg.addEventListener("change", () => {
+    if (profileImg.files[0].type == "image/png" || profileImg.files[0].type == "image/jpeg") {
+        let propicture = document.querySelector(".pro-img")
+        propicture.src = URL.createObjectURL(profileImg.files[0])
+    }
+});
