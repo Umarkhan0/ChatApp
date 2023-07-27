@@ -1,8 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-import { getFirestore, collection, doc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut ,onAuthStateChanged  } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyC-X4qxyI3jqxYYKdhcmEhWN-luVmQIWx4",
     authDomain: "chat-app-b4dc9.firebaseapp.com",
@@ -17,6 +18,39 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        let userLogoutOption3 = document.querySelector(".user-logout-option1");
+        let userLogoutOption4 = document.querySelector(".user-logout-option2");
+        if(userLogoutOption4){ 
+        userLogoutOption4.innerHTML =
+                ` <button class="sign-btn">
+              
+                              Loding...
+                              </button>`}
+                              if(userLogoutOption3){
+                              userLogoutOption3.innerHTML =
+                ` <button class="sign-btn mt-3">
+              
+                              Loding...
+                              </button>`
+                            }
+    } else {
+      // User is signed out
+      // ...
+      console.log("sign out")
+    }
+  });
+let profileNameInput = document.querySelector(".profile-name-input");
+let profileBirthdayInput = document.querySelector(".profile-birthday-input");
+let profileLastName = document.querySelector(".last-name-input");
+let profileEmailInput = document.querySelector(".profile-email-input");
+let profileCountryInput = document.querySelector(".country-input");
+let dropdownGenderProfile = document.querySelector(".dropdown-gender-profile");
+
+
+
 
 
 
@@ -59,8 +93,10 @@ let otherLoginHome = document.querySelector(".other-login-home");
 otherLoginHome && otherLoginHome.addEventListener("click", () => {
     window.history.back()
 });
+
 let loginBtn = document.querySelector(".login-btn");
 loginBtn && loginBtn.addEventListener("click", () => {
+  
     let emailInput = document.querySelector(".email-input");
     let password = document.querySelector(".password-input");
     !emailInput.value.trim()
@@ -77,15 +113,47 @@ loginBtn && loginBtn.addEventListener("click", () => {
         (emailInput.value.trim()
         &&
         password.value.trim()) {
-        let emailSet = emailInput.value.slice(1, 5)
+        let emailSet = emailInput.value
+      
         signInWithEmailAndPassword(auth, emailInput.value, password.value)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
 
                 const user = userCredential.user;
                 window.location.assign("index.html");
                 localStorage.setItem("id", user.uid)
-                localStorage.setItem("name", `${emailSet}...`)
+                localStorage.setItem("name", `${emailSet}`);
+                console.log("sign in")
                 // ...
+
+              
+                let getName = localStorage.getItem("name")
+                let getUid = localStorage.getItem("id");
+                const querySnapshott = await getDocs(collection(db, getName));
+                querySnapshott.forEach((doc) => {
+                    userLogoutOption1 &&
+                        getName != null ?
+
+                        userLogoutOption1.innerHTML =
+                        ` <button class="sign-btn option1 mt-3">
+                        helo
+                                          ${doc.data().name}
+                                      </button>
+                                      <div class="more-option2">
+                                      `
+                        : ""
+                    userLogoutOption2 &&
+                        getName != null ?
+                        userLogoutOption2.innerHTML =
+                        ` <button class="sign-btn option1">
+                      
+                                      ${doc.data().name}
+                                      </button>
+                
+                                      <div class="more-option">
+                                  `
+                        :
+                        " SIGN IN";
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -104,6 +172,7 @@ form
     &&
     form.addEventListener("click", (event) => {
         event.preventDefault();
+        // let textLightSpinner = document.querySelector(".text-light");
         let inputName = document.querySelector(".input-name");
         let birthdayInput = document.querySelector(".birthday-input");
         let dropdown = document.querySelector(".dropdown-gender");
@@ -157,6 +226,7 @@ form
         let strongPasswordPopop = document.querySelector(".strong-password-popop")
         let emailPattern = /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
         emailPattern.test(rigisterInput.value)
+
             ?
             password.value == reInterPassword.value
                 ?
@@ -174,11 +244,13 @@ form
                     &&
                     reInterPassword.value.trim()
                     ?
+
                     createUserWithEmailAndPassword(auth, rigisterInput.value, reInterPassword.value)
                         .then(async (userCredential) => {
                             const user = userCredential.user;
                             localStorage.setItem("id", user.uid)
-                            let saveNameDataBase = rigisterInput.value.slice(0, 4)
+                            let saveNameDataBase = rigisterInput.value
+
                             localStorage.setItem("name", saveNameDataBase)
                             await setDoc(doc(db, saveNameDataBase, user.uid), {
                                 name: inputName.value,
@@ -186,8 +258,11 @@ form
                                 email: rigisterInput.value,
                                 birtday: birthdayInput.value,
                                 gender: dropdown.value,
-                                country: dropdownCoutry.value
+                                country: dropdownCoutry.value,
+                                images: "images/user.png"
                             });
+                            // textLightSpinner.style.display = "none"
+                            window.location.assign("index.html");
                         })
                         .catch(async (error) => {
                             const errorCode = error.code;
@@ -199,9 +274,8 @@ form
                                 rigisterInput.style.border = "1px solid red" :
                                 "h"
                             errorMessage == "Firebase: Error (auth/email-already-in-use)." ?
-                                swal({
-                                    text: "Already use Email",
-                                }) : "continue"
+                                swal(errorMessage.slice(15))
+                                : "continue"
                         })
                     : ""
                 : reInterPassword.style.border = "1px solid red"
@@ -210,36 +284,39 @@ form
 let backAlready = document.querySelector(".already");
 backAlready
     &&
-    backAlready.addEventListener("click", () => {
+    backAlready.addEventListener("click", async () => {
         window.history.back();
-    })
-
-
-
+    });
 let userLogoutOption1 = document.querySelector(".user-logout-option1");
 let userLogoutOption2 = document.querySelector(".user-logout-option2");
 let getName = localStorage.getItem("name")
 let getUid = localStorage.getItem("id");
-userLogoutOption1 &&
-    getName != null ?
-    userLogoutOption1.innerHTML =
-    ` <button class="sign-btn option1 mt-3">
-                          ${getName}...
+const querySnapshott = await getDocs(collection(db, getName));
+
+querySnapshott.forEach((doc) => {
+    userLogoutOption1 &&
+        getName != null ?
+
+        userLogoutOption1.innerHTML =
+        ` <button class="sign-btn option1 mt-3">
+                          ${doc.data().name}
                       </button>
                       <div class="more-option2">
                       `
-    : ""
-userLogoutOption2 &&
-    getName != null ?
-    userLogoutOption2.innerHTML =
-    ` <button class="sign-btn option1">
-                      ${getName}
+        : ""
+
+    userLogoutOption2 &&
+        getName != null ?
+        userLogoutOption2.innerHTML =
+        ` <button class="sign-btn option1">
+                      ${doc.data().name}
                       </button>
 
                       <div class="more-option">
                   `
-    :
-    " SIGN IN"
+        :
+        " SIGN IN"
+})
 let opion1 = document.querySelectorAll(".option1");
 opion1.forEach(element => {
     var checkhogya = false;
@@ -336,25 +413,111 @@ Logout
 let localNameCollection = localStorage.getItem("name")
 const querySnapshot = await getDocs(collection(db, localNameCollection));
 querySnapshot.forEach((doc) => {
-    // console.log(doc.id, " => ", doc.data());
-    let profileNameInput = document.querySelector(".profile-name-input");
-    let profileBirthdayInput = document.querySelector(".profile-birthday-input");
-    let profileLastName = document.querySelector(".last-name-input");
-    let profileEmailInput = document.querySelector(".profile-email-input");
-    let profileCountryInput = document.querySelector(".country-input");
-    let dropdownGenderProfile = document.querySelector(".dropdown-gender-profile")
-    profileNameInput.value = doc.data().name;
-    profileLastName.value = doc.data().lastName;
-    profileEmailInput.value = doc.data().email;
-    profileBirthdayInput.value = doc.data().birtday;
-    profileCountryInput.value = doc.data().country
-    dropdownGenderProfile.value = doc.data().gender;
-})
+    let loader = document.querySelector(".loader");
+    if (loader) {
+        loader.style.display = "none";
+        let propicture = document.querySelector(".pro-img")
+        propicture.src = doc.data().images
+        profileNameInput.value = doc.data().name;
+        profileLastName.value = doc.data().lastName;
+        profileEmailInput.value = doc.data().email;
+        profileBirthdayInput.value = doc.data().birtday;
+        profileCountryInput.value = doc.data().country
+        dropdownGenderProfile.value = doc.data().gender;
+    }
+});
 let dmcc = document.querySelector(".input-file")
 let profileImg = document.querySelector("#fileInput");
 profileImg && profileImg.addEventListener("change", () => {
+    console.log(profileImg.files.name = `${localNameCollection}.png`)
     if (profileImg.files[0].type == "image/png" || profileImg.files[0].type == "image/jpeg") {
+
         let propicture = document.querySelector(".pro-img")
-        propicture.src = URL.createObjectURL(profileImg.files[0])
-    }
+        const mountainImagesRef = ref(storage, profileImg.files.name = `${localNameCollection.slice(0, 4)}.png`);
+
+        const uploadTask = uploadBytesResumable(mountainImagesRef, profileImg.files[0]);
+
+
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                }
+            },
+            (error) => {
+
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+
+                    console.log('File available at', downloadURL);
+
+                    let localNameUpdateCollection = localStorage.getItem("name")
+                    let localIdUpdateCollection = localStorage.getItem("id")
+                    const washingtonRef = doc(db, localNameUpdateCollection, localIdUpdateCollection)
+                    await updateDoc(washingtonRef, {
+                        images: downloadURL,
+                    });
+                    propicture.src = URL.createObjectURL(profileImg.files[0]);
+                });
+            });
+    };
 });
+let btnUpdate = document.querySelector(".btn-update");
+btnUpdate && btnUpdate.addEventListener("click", async () => {
+    !profileNameInput.value.trim() ?
+        profileNameInput.style.border = "1px solid red" :
+        profileNameInput.style.border = "none"
+    !profileLastName.value.trim() ?
+        profileLastName.style.border = "1px solid red" :
+        profileLastName.style.border = "none"
+
+    !profileBirthdayInput.value.trim() ?
+        profileBirthdayInput.style.border = "1px solid red" :
+        profileBirthdayInput.style.border = "none"
+    let localNameUpdateCollection = localStorage.getItem("name")
+    let localIdUpdateCollection = localStorage.getItem("id")
+
+    const washingtonRef = doc(db, localNameUpdateCollection, localIdUpdateCollection)
+    if (profileNameInput.value.trim() && profileLastName.value.trim() && profileBirthdayInput.value.trim())
+        try {
+            await updateDoc(washingtonRef, {
+                name: profileNameInput.value,
+                lastName: profileLastName.value,
+                email: profileEmailInput.value,
+                country: profileCountryInput.value,
+                gender: dropdownGenderProfile.value,
+                birtday: profileBirthdayInput.value
+            });
+            window.location.assign("index.html")
+        }
+        catch (error) {
+            console.log(error)
+        }
+});
+
+
+
+
+
+// let userLogoutOption3 = document.querySelector(".user-logout-option1");
+// let userLogoutOption4 = document.querySelector(".user-logout-option2");
+// if(userLogoutOption4){ 
+// userLogoutOption4.innerHTML =
+//         ` <button class="sign-btn">
+      
+//                       Loding...
+//                       </button>`}
+//                       if(userLogoutOption3){
+//                       userLogoutOption3.innerHTML =
+//         ` <button class="sign-btn mt-3">
+      
+//                       Loding...
+//                       </button>`}
