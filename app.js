@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-import { getFirestore, collection, doc, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs,getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js";
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut ,onAuthStateChanged  } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
@@ -19,6 +19,13 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+
+
+
+
+
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         let userLogoutOption3 = document.querySelector(".user-logout-option1");
@@ -120,23 +127,25 @@ loginBtn && loginBtn.addEventListener("click", () => {
 
                 const user = userCredential.user;
                 window.location.assign("index.html");
-                localStorage.setItem("id", user.uid)
+                // localStorage.setItem("id", user.uid)
                 localStorage.setItem("name", `${emailSet}`);
                 console.log("sign in")
                 // ...
 
               
                 let getName = localStorage.getItem("name")
-                let getUid = localStorage.getItem("id");
-                const querySnapshott = await getDocs(collection(db, getName));
-                querySnapshott.forEach((doc) => {
-                    userLogoutOption1 &&
+                // let getUid = localStorage.getItem("id");
+                
+                const refren = doc(db, "users", getName)
+                const docSnap = await getDoc(refren);
+                    if (docSnap.exists()) {
+                    // console.log(docSnap.data)
+                userLogoutOption1 &&
                         getName != null ?
-
                         userLogoutOption1.innerHTML =
                         ` <button class="sign-btn option1 mt-3">
                         helo
-                                          ${doc.data().name}
+                                          ${docSnap.data().name}
                                       </button>
                                       <div class="more-option2">
                                       `
@@ -146,14 +155,17 @@ loginBtn && loginBtn.addEventListener("click", () => {
                         userLogoutOption2.innerHTML =
                         ` <button class="sign-btn option1">
                       
-                                      ${doc.data().name}
+                                      ${docSnap.data().name}
                                       </button>
                 
                                       <div class="more-option">
                                   `
                         :
                         " SIGN IN";
-                });
+                }
+                // });
+                // console.log(docSnap().data)
+
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -172,7 +184,6 @@ form
     &&
     form.addEventListener("click", (event) => {
         event.preventDefault();
-        // let textLightSpinner = document.querySelector(".text-light");
         let inputName = document.querySelector(".input-name");
         let birthdayInput = document.querySelector(".birthday-input");
         let dropdown = document.querySelector(".dropdown-gender");
@@ -252,7 +263,7 @@ form
                             let saveNameDataBase = rigisterInput.value
 
                             localStorage.setItem("name", saveNameDataBase)
-                            await setDoc(doc(db, saveNameDataBase, user.uid), {
+                            await setDoc(doc(db, "users", saveNameDataBase), {
                                 name: inputName.value,
                                 lastName: lastName.value,
                                 email: rigisterInput.value,
@@ -290,33 +301,40 @@ backAlready
 let userLogoutOption1 = document.querySelector(".user-logout-option1");
 let userLogoutOption2 = document.querySelector(".user-logout-option2");
 let getName = localStorage.getItem("name")
-let getUid = localStorage.getItem("id");
-const querySnapshott = await getDocs(collection(db, getName));
-
-querySnapshott.forEach((doc) => {
-    userLogoutOption1 &&
+// let getUid = localStorage.getItem("id");
+  
+const refren = doc(db, "users", getName)
+const docSnap = await getDoc(refren);
+// const querySnapshott = await getDocs(collection(db, getName));
+// querySnapshott.forEach((doc) => {
+    if (docSnap.exists()) {
+    console.log(docSnap.data().name)
+userLogoutOption1 &&
         getName != null ?
-
         userLogoutOption1.innerHTML =
         ` <button class="sign-btn option1 mt-3">
-                          ${doc.data().name}
+        
+                         ${docSnap.data().name}
                       </button>
                       <div class="more-option2">
                       `
         : ""
-
     userLogoutOption2 &&
         getName != null ?
         userLogoutOption2.innerHTML =
         ` <button class="sign-btn option1">
-                      ${doc.data().name}
+      
+                      ${docSnap.data().name}
                       </button>
 
                       <div class="more-option">
                   `
         :
-        " SIGN IN"
-})
+        " SIGN IN";
+}
+// });
+// console.log(docSnap().data)
+
 let opion1 = document.querySelectorAll(".option1");
 opion1.forEach(element => {
     var checkhogya = false;
@@ -411,25 +429,31 @@ Logout
 
 });
 let localNameCollection = localStorage.getItem("name")
-const querySnapshot = await getDocs(collection(db, localNameCollection));
-querySnapshot.forEach((doc) => {
+// let localIDCollection = localStorage.getItem("id")
+console.log('docSnapData')
+
+const refrens = doc(db, "users", localNameCollection)
+const docSnapData = await getDoc(refrens);
+
+if (docSnapData.exists()) {
     let loader = document.querySelector(".loader");
     if (loader) {
         loader.style.display = "none";
         let propicture = document.querySelector(".pro-img")
-        propicture.src = doc.data().images
-        profileNameInput.value = doc.data().name;
-        profileLastName.value = doc.data().lastName;
-        profileEmailInput.value = doc.data().email;
-        profileBirthdayInput.value = doc.data().birtday;
-        profileCountryInput.value = doc.data().country
-        dropdownGenderProfile.value = doc.data().gender;
+        propicture.src = docSnapData.data().images
+        profileNameInput.value = docSnapData.data().name;
+        profileLastName.value = docSnapData.data().lastName;
+        profileEmailInput.value = docSnapData.data().email;
+        profileBirthdayInput.value = docSnapData.data().birtday;
+        profileCountryInput.value = docSnapData.data().country
+        dropdownGenderProfile.value = docSnapData.data().gender;
     }
-});
+}
+
 let dmcc = document.querySelector(".input-file")
 let profileImg = document.querySelector("#fileInput");
 profileImg && profileImg.addEventListener("change", () => {
-    console.log(profileImg.files.name = `${localNameCollection}.png`)
+    console.log(profileImg.files.name = `${localNameCollection.slice(0,4)}.png`)
     if (profileImg.files[0].type == "image/png" || profileImg.files[0].type == "image/jpeg") {
 
         let propicture = document.querySelector(".pro-img")
@@ -461,7 +485,7 @@ profileImg && profileImg.addEventListener("change", () => {
 
                     let localNameUpdateCollection = localStorage.getItem("name")
                     let localIdUpdateCollection = localStorage.getItem("id")
-                    const washingtonRef = doc(db, localNameUpdateCollection, localIdUpdateCollection)
+                    const washingtonRef = doc(db, "users", localNameUpdateCollection)
                     await updateDoc(washingtonRef, {
                         images: downloadURL,
                     });
@@ -485,13 +509,13 @@ btnUpdate && btnUpdate.addEventListener("click", async () => {
     let localNameUpdateCollection = localStorage.getItem("name")
     let localIdUpdateCollection = localStorage.getItem("id")
 
-    const washingtonRef = doc(db, localNameUpdateCollection, localIdUpdateCollection)
+    const washingtonRef = doc(db, "users", localNameUpdateCollection)
     if (profileNameInput.value.trim() && profileLastName.value.trim() && profileBirthdayInput.value.trim())
         try {
             await updateDoc(washingtonRef, {
                 name: profileNameInput.value,
                 lastName: profileLastName.value,
-                email: profileEmailInput.value,
+                // email: profileEmailInput.value,
                 country: profileCountryInput.value,
                 gender: dropdownGenderProfile.value,
                 birtday: profileBirthdayInput.value
@@ -504,20 +528,22 @@ btnUpdate && btnUpdate.addEventListener("click", async () => {
 });
 
 
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        let  chatBtns = document.querySelectorAll(".chat-btn");
+        chatBtns.forEach(chatBtnsElement => {
+           chatBtnsElement.addEventListener("click",()=>{
+window.location.assign("chat.html")
+           })
+        });
 
+    } else {
+        swal({
+            title: "Please Login",
+            icon: "error"
+          });
+          
+      console.log("sign out")
+    }
+  });
 
-
-// let userLogoutOption3 = document.querySelector(".user-logout-option1");
-// let userLogoutOption4 = document.querySelector(".user-logout-option2");
-// if(userLogoutOption4){ 
-// userLogoutOption4.innerHTML =
-//         ` <button class="sign-btn">
-      
-//                       Loding...
-//                       </button>`}
-//                       if(userLogoutOption3){
-//                       userLogoutOption3.innerHTML =
-//         ` <button class="sign-btn mt-3">
-      
-//                       Loding...
-//                       </button>`}

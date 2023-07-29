@@ -799,7 +799,7 @@
 }
 
 
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 403px) {
     .second-last-password {
         width: 100%;
         display: flex;
@@ -810,4 +810,29 @@
         width: 89%;
         margin-top: 14px;
     }
+}
+
+.chat-body {
+    background-color: #000;
+
+}
+
+img.card-img-top {
+    background-color: #1fafad !important;
+}
+
+.card-title {
+    text-align: center;
+    font-size: 31px;
+}
+.join-chat{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    padding: 5px 12px;
+    border-radius: 4px;
+}
+#chat-id{
+    position: absolute !important;
 }
