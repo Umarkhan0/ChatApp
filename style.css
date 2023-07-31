@@ -810,10 +810,14 @@
         width: 89%;
         margin-top: 14px;
     }
+
+    .icons-input {
+        width: 40% !important;
+    }
 }
 
 .chat-body {
-    background-color: #000;
+    background-color: #192229;
 
 }
 
@@ -825,7 +829,8 @@ img.card-img-top {
     text-align: center;
     font-size: 31px;
 }
-.join-chat{
+
+.join-chat {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -833,6 +838,253 @@ img.card-img-top {
     padding: 5px 12px;
     border-radius: 4px;
 }
-#chat-id{
+
+.select-chat {
     position: absolute !important;
+    font-size: small;
+    cursor: pointer;
+}
+
+.select-chat-id {
+    position: relative;
+    font-size: xx-large;
+    color: #fff;
+    opacity: 0;
+}
+
+.check-name {
+    background-color: #000 !important;
+    width: 130px;
+    /* position: absolute; */
+}
+
+.main-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.img-header {
+    width: 20%;
+    background-color: #1f2831;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.user-list-section {
+    display: flex;
+}
+
+.img-logo-chat-page {
+    display: flex;
+    text-align: center;
+    margin: auto;
+
+}
+
+.img-header {
+    box-shadow: 0 1px 1px #fff;
+    padding: 10px;
+}
+
+.user-img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.name-show {
+    margin-top: 18px;
+    margin-left: 0px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.about-show {
+    /* margin-top: 0px; */
+    color: #fff;
+    font-size: smaller;
+}
+
+.chat-name {
+    display: flex;
+}
+
+.name-about {
+    align-items: center;
+}
+
+
+@media screen and (max-width: 865px) {
+    .name-about {
+        display: none;
+    }
+
+    .img-header {
+
+        width: 12% !important;
+    }
+
+    .user-img {
+        margin: 4px;
+    }
+
+    .icons-input {
+        width: 58% !important;
+    }
+
+    .messege-box {
+        width: 86% !important;
+    }
+
+    .footer-boxes {
+        width: 88% !important;
+    }
+
+}
+
+.chat-box {
+    height: 100%;
+    width: 23%;
+    background-color: #009688;
+}
+
+.main-page {
+    display: flex;
+}
+
+.head-chat-selected {
+    height: 12%;
+    width: 100%;
+    position: fixed;
+    background-color: #141b20;
+    display: flex
+}
+
+.user-img-selected {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 10px;
+}
+
+.user-name-selected {
+    color: #fff;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-boxes {
+    height: 55px;
+    width: 79%;
+    background-color: #141b20;
+    bottom: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icons {
+    color: #fff;
+    margin-left: 1%;
+}
+
+.icons-input {
+    width: 60%;
+    margin-left: 1%;
+    background-color: #192229;
+    border: none;
+    outline: none;
+    color: #fff;
+    padding: 4px;
+}
+
+.chat-name:hover {
+    background-color: #000;
+    cursor: pointer;
+}
+
+.chat-name:active {
+    opacity: 0.5;
+}
+
+.select-chat-page {
+    color: #fff;
+
+}
+
+.select-chat-id {
+    color: #fff !important;
+    font-size: x-large !important;
+    padding: 23px 33px;
+    opacity: 0 !important;
+}
+
+.select-chat-id:hover {
+    background-color: #000;
+}
+
+.bi-arrow-left-short {
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    transition: 20s;
+
+    cursor: pointer;
+}
+
+.img-logo {
+    display: flex !important;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.bi-arrow-left-short:hover {
+    zoom: 1.2;
+    /* }#chat-card-print{
+    display: none !important; */
+}
+
+.chat-section {
+    display: none;
+}
+
+.margin-text-messege-getter {
+    background-color: blue;
+    color: #fff;
+    margin-top: 20px;
+    padding: 3px !important;
+    width: 100px;
+}.messege-set{
+    background-color: #00ba94;
+}
+.margin-text-messege-sender{
+    background-color: #009688;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+.chat-box {
+    background-color: unset;
+}
+
+.messege-box {
+    margin-top: 67px;
+    position: absolute;
+    border: 1px solid #fff;
+    height: 78%;
+    width: 79%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    /* bottom: 0; */
 }
