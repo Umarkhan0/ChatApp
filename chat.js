@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, query, where, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -47,10 +47,23 @@ let getData = async () => {
     let userNameSelected = document.querySelector(".user-name-selected");
     userNameSelected.textContent = docSnap.data().name
     userImgSelected.src = docSnap.data().images;
+    console.log(docSnap.data().email)
+    let chatId;
+    if (localStorage.getItem("name") < docSnap.data().email) {
+      chatId = localStorage.getItem("name") + docSnap.data().email
+    } else {
+      chatId = docSnap.data().email + localStorage.getItem("name")
+    }
+    console.log(chatId)
+
+
+    getRealtimeUpdates(chatId)
+
+
   } else {
     console.log("No such document!");
   }
-};
+}
 
 let joinChatMembers = document.querySelectorAll(".select-chat");
 joinChatMembers.forEach(joinChatMember => {
@@ -86,9 +99,11 @@ joinChatMembers.forEach(joinChatMember => {
         </div>
         <div class="main-messege-container container-fluid">
         <div class="messege-box">
-        <div class="margin-text-messege-getter" >hello daer</div>
-        <p class="margin-text-messege-sender">hello dear</p>
-       
+        <div>
+        <div class="margin-text-messege-sender"><p class="messege-getter">hello daer</p></div>
+        <div class="msg-prrint"></div>
+
+       </div>
 
         </div></div>
         <div class="footer-boxes">
@@ -105,7 +120,7 @@ joinChatMembers.forEach(joinChatMember => {
             </svg>
           </span>
           <input class="icons-input" type="text" placeholder="Enter your message">
-          <span class="icons">
+          <span class="icons sent-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
               <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
             </svg>
@@ -114,6 +129,56 @@ joinChatMembers.forEach(joinChatMember => {
       </section>
     </div>
   `;
+    let sentBtn = document.querySelector(".sent-btn");
+    sentBtn.addEventListener("click", async () => {
+      let messege = document.querySelector(".msg-prrint");
+      let iconsInput = document.querySelector(".icons-input");
+      messege.innerHTML += `
+  <div class="margin-text-messege-getter" ><p class="messege">${iconsInput.value}</p></div>
+  `;
+      // console.log( event.target.textContent)
+
+      const docRef = doc(db, "users", event.target.textContent);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        let chatId;
+        if (localStorage.getItem("name") < docSnap.data().email) {
+          chatId = localStorage.getItem("name") + docSnap.data().email
+        } else {
+          chatId = docSnap.data().email + localStorage.getItem("name")
+        }
+
+
+        const docRefs = await addDoc(collection(db, "messege"), {
+          chatId: chatId,
+          messege: iconsInput.value,
+        });
+        console.log("Document written with ID: ", docRefs.id);
+
+getRealtimeUpdates(chatId)
+      } else {
+        console.log("No such document!");
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    })
+
     let backCard = document.querySelector(".back-card");
     backCard && backCard.addEventListener("click", async () => {
       window.location.reload()
@@ -158,7 +223,6 @@ joinChatMembers.forEach(joinChatMember => {
         </div>
       </div>
     `;
-
       let joinChatMembers = document.querySelectorAll(".select-chat-page");
       joinChatMembers.forEach(joinChatMember => {
         joinChatMember.addEventListener("click", () => {
@@ -168,3 +232,34 @@ joinChatMembers.forEach(joinChatMember => {
     });
   });
 });
+
+
+
+const qDat = query(collection(db, "cities"));
+
+const querySnapshotD = await getDocs(qDat);
+querySnapshotD.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(doc.id, " => ", doc.data());
+
+
+let getRealtimeUpdates = async(chatID) => {
+  const q = query(collection(db, "messeges"), where("chatID", "==", chatID));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    alert()
+    const messeges = [];
+    // querySnapshot.forEach((doc) => {
+      alert()
+      messeges.push(doc.data());
+    // });
+    console.log("messeges", messeges);
+  });
+
+
+
+}
+
+})
+
+
+
