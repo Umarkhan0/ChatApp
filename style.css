@@ -1055,7 +1055,8 @@ img.card-img-top {
 }
 
 .chat-section {
-    display: none;
+    /* display: none; */
+    display: block !important;
 }
 
 .margin-text-messege-getter {
@@ -1063,7 +1064,7 @@ img.card-img-top {
     color: #fff;
     margin-top: 20px;
     padding: 3px !important;
-    width: 100%;
+    /* width: 100%; */
     height: 30px;
     display: flex;
     justify-content: flex-end;
@@ -1077,12 +1078,13 @@ img.card-img-top {
     color: #fff;
     margin-top: 20px;
     padding: 3px !important;
-    width: 100%;
-    height: 30px;
-    /* background-color: #05a5ee; */
+    width: 39%;
+    max-height: 30px;
+    background-color: #05a5ee;
 }
 
 .chat-box {
+    display: none;
     background-color: unset;
 }
 
@@ -1100,15 +1102,32 @@ img.card-img-top {
 .messege {
     padding: 0px 11px;
     height: 25px;
-    background-color: #009688;
+    /* background-color: #009688; */
+    display: inline-block;
 }
 
 .messege-getter {
     padding: 0px 11px;
-    height: 25px;
-    width: 120px;
-    /* width: auto; */
+    width: 100%;
     content: normal;
-    background-color: #009688;
+    /* background-color: #009688; */
 
+}
+
+.resive-messege {
+    color: #009688;
+    width: 70%;
+    background-color: #fff;
+    display: inline-block;
+}
+
+.messg {
+    color: #009688;
+    width: 70%;
+    background-color: #fff;
+    display: flex;
+    justify-content: flex-end;
+}
+.messg-re{
+    color: #000 !important;
 }
