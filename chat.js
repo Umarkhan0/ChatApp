@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, getDocs, query, where, onSnapshot, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, onSnapshot, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 
 
 const firebaseConfig = {
@@ -16,16 +17,34 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
 
+  } else {
+    window.location.assign("index.html")
+  }
+});
 
 let current = localStorage.getItem("name");
+const chatMember = document.querySelector(".chat-member");
+
+chatMember.innerHTML = `
+<div class="spinner-chat">
+<div class="spinner-border text-light" role="status">
+<span class="visually-hidden">Loading...</span>
+</div>
+</div>
+`
+
 
 const q = query(collection(db, "users"), where("email", "!=", current));
 const querySnapshot = await getDocs(q);
-const chatMember = document.querySelector(".chat-member");
-
+console.log("user show")
+document.querySelector(".spinner-chat").style.display = "none"
 querySnapshot.forEach((doc) => {
+  
   chatMember.innerHTML += `
     <div onclick="selectChat('${doc.data().name}', '${doc.data().images}', '${doc.id}')">
       <div class="chat-name select-chat-page">
@@ -46,8 +65,19 @@ let selectChat = (selectChatName, selectChatImg, uid) => {
   } else {
     chatId = uid + current;
   }
-  console.log(chatId);
 
+  let chatContainor = document.getElementById("chatContainor");
+  chatContainor.innerHTML = ""
+
+
+
+  chatContainor.innerHTML = `
+    <div class="spinner-chat">
+    <div class="spinner-border text-light" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+</div>
+    `
   let userImgSelected = document.querySelector(".user-img-selected");
   let userNameSelected = document.querySelector(".user-name-selected");
   userImgSelected.src = selectChatImg;
@@ -59,6 +89,7 @@ let selectChat = (selectChatName, selectChatImg, uid) => {
   getRealtimeUpdates(chatId);
   let sentBtn = document.querySelector(".sent-btn");
   sentBtn.addEventListener("click", async () => {
+    // alert()
     let messege = document.querySelector(".msg-prrint");
     let iconsInput = document.querySelector(".icons-input");
 
@@ -72,7 +103,7 @@ let selectChat = (selectChatName, selectChatImg, uid) => {
     console.log("Document written with ID: ", docRef.id);
 
     getRealtimeUpdates(chatId)
-
+    iconsInput.value = ""
   })
 }
 
@@ -87,42 +118,43 @@ let getRealtimeUpdates = async (chatId) => {
   const q = query(collection(db, "messges"), where("chatId", "==", chatId), orderBy("time"));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const messages = [];
+    let spinnerBorder = document.querySelector(".spinner-border");
+    spinnerBorder.style.display = "none"
     querySnapshot.forEach((doc) => {
       messages.push(doc.data());
-      let msgSender = document.querySelector(".messege");
-      let meesegeResive = document.querySelector(".messege-getter");
-let completePrintMessege = document.querySelector(".complete-print-messege")
-      // msgSender.innerHTML = "";
-      // meesegeResive.innerHTML = "";
-      completePrintMessege.innerHTML = ""
-      // let time = moment(messages[0].time.toDate()).fromNow();
 
+
+
+      let chatContainor = document.getElementById("chatContainor");
+      chatContainor.innerHTML = ""
       for (var i = 0; i < messages.length; i++) {
-        
 
-completePrintMessege.innerHTML += `
-<div class="sent-messege">
-         <p class="messg">${messages[i].messege}</p></div>
-        
-`
-if (current === messages[i].sender) {
-// alert()
-  let sentMessege = document.querySelector(".messg");
-  sentMessege.style.display = "flex"
-  sentMessege.style.justifyContent = 'flex-end';
+        if (current === messages[i].sender) {
+
+          chatContainor.innerHTML += `
+          <div class="message-box left-message" id= "receiver-msg">
+          <div class="msg" >
+          ${messages[i].messege}
+          <br>
+          </div>
+       
+         
+          </div>
+       `
+        }
+        else {
+          chatContainor.innerHTML += `
+          <div class="message-box right-message d-flex">
+          <div class="msg1" >
+          <span class="msg1">${messages[i].messege}</span>
+          <br>
+         
+          </div>
           
-          }
-        // if (current === messages[i].reciver) {
-
-        // //   meesegeResive.innerHTML += `
-        // // <div>  <p class="resive-messege">${messages[i].messege}</p></div>
-
-        
-      
-        // }
-      };
+          `
+        }
+      }
     });
   })
 };
-
 

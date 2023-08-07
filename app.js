@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-import { getFirestore, collection, doc, getDocs,getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut ,onAuthStateChanged  } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyC-X4qxyI3jqxYYKdhcmEhWN-luVmQIWx4",
     authDomain: "chat-app-b4dc9.firebaseapp.com",
@@ -30,25 +30,22 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         let userLogoutOption3 = document.querySelector(".user-logout-option1");
         let userLogoutOption4 = document.querySelector(".user-logout-option2");
-        if(userLogoutOption4){ 
-        userLogoutOption4.innerHTML =
+        if (userLogoutOption4) {
+            userLogoutOption4.innerHTML =
                 ` <button class="sign-btn">
               
                               Loding...
                               </button>`}
-                              if(userLogoutOption3){
-                              userLogoutOption3.innerHTML =
-                ` <button class="sign-btn mt-3">
-              
-                              Loding...
-                              </button>`
-                            }
+       
     } else {
-      // User is signed out
-      // ...
-      console.log("sign out")
+
+        let  chatBtn = document.querySelector(".chat-btn");
+        chatBtn.addEventListener("click", () =>{
+            window.location.assign("login.html")
+        })
+        console.log("sign out")
     }
-  });
+});
 let profileNameInput = document.querySelector(".profile-name-input");
 let profileBirthdayInput = document.querySelector(".profile-birthday-input");
 let profileLastName = document.querySelector(".last-name-input");
@@ -103,7 +100,7 @@ otherLoginHome && otherLoginHome.addEventListener("click", () => {
 
 let loginBtn = document.querySelector(".login-btn");
 loginBtn && loginBtn.addEventListener("click", () => {
-  
+
     let emailInput = document.querySelector(".email-input");
     let password = document.querySelector(".password-input");
     !emailInput.value.trim()
@@ -121,7 +118,7 @@ loginBtn && loginBtn.addEventListener("click", () => {
         &&
         password.value.trim()) {
         let emailSet = emailInput.value
-      
+
         signInWithEmailAndPassword(auth, emailInput.value, password.value)
             .then(async (userCredential) => {
 
@@ -132,15 +129,15 @@ loginBtn && loginBtn.addEventListener("click", () => {
                 console.log("sign in")
                 // ...
 
-              
+
                 let getName = localStorage.getItem("name")
                 // let getUid = localStorage.getItem("id");
-                
+
                 const refren = doc(db, "users", getName)
                 const docSnap = await getDoc(refren);
-                    if (docSnap.exists()) {
+                if (docSnap.exists()) {
                     // console.log(docSnap.data)
-                userLogoutOption1 &&
+                    userLogoutOption1 &&
                         getName != null ?
                         userLogoutOption1.innerHTML =
                         ` <button class="sign-btn option1 mt-3">
@@ -164,7 +161,6 @@ loginBtn && loginBtn.addEventListener("click", () => {
                         " SIGN IN";
                 }
                 // });
-                // console.log(docSnap().data)
 
             })
             .catch((error) => {
@@ -272,7 +268,6 @@ form
                                 country: dropdownCoutry.value,
                                 images: "images/user.png"
                             });
-                            // textLightSpinner.style.display = "none"
                             window.location.assign("index.html");
                         })
                         .catch(async (error) => {
@@ -302,14 +297,12 @@ let userLogoutOption1 = document.querySelector(".user-logout-option1");
 let userLogoutOption2 = document.querySelector(".user-logout-option2");
 let getName = localStorage.getItem("name")
 // let getUid = localStorage.getItem("id");
-  
+
 const refren = doc(db, "users", getName)
 const docSnap = await getDoc(refren);
-// const querySnapshott = await getDocs(collection(db, getName));
-// querySnapshott.forEach((doc) => {
-    if (docSnap.exists()) {
+if (docSnap.exists()) {
     console.log(docSnap.data().name)
-userLogoutOption1 &&
+    userLogoutOption1 &&
         getName != null ?
         userLogoutOption1.innerHTML =
         ` <button class="sign-btn option1 mt-3">
@@ -332,8 +325,6 @@ userLogoutOption1 &&
         :
         " SIGN IN";
 }
-// });
-// console.log(docSnap().data)
 
 let opion1 = document.querySelectorAll(".option1");
 opion1.forEach(element => {
@@ -374,36 +365,13 @@ Logout
 
         };
         checkhogya = !checkhogya;
-        let moreOption2 = document.querySelector(".more-option2");
-        moreOption2.innerHTML =
-            `
-        <div class="log-out">
-        <button class="profile-text-icon profile-btn">
-        <svg class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
-        </svg>
-<span>
-        Profile
-        </span>
-        </button>
-        <br />
-        <button class="log-out-text log-out-user2">
-        <svg  class="icon-profile" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-        </svg><span>Logout</span>
-        </div>
-        </button>
-                `
         let btncs = document.querySelectorAll(".log-out-user2");
         btncs.forEach(elementLogOut => {
             elementLogOut.addEventListener("click", () => {
                 localStorage.clear();
                 signOut(auth).then(() => {
-                    //    console.log("hogia sign out")
                     window.location.reload()
                 }).catch((error) => {
-                    // An error happened.
                 });
 
             });
@@ -412,24 +380,13 @@ Logout
         let profileBtn = document.querySelectorAll(".profile-btn");
         profileBtn.forEach(profileBtnElement => {
             profileBtnElement.addEventListener("click", async () => {
-
                 window.location.assign("profile.html")
             });
         });
-        if (checkhogya) {
-            moreOption2.style.display = "none"
-        }
-        else {
-            moreOption2.style.display = "block"
-
-        };
-
-
     });
 
 });
 let localNameCollection = localStorage.getItem("name")
-// let localIDCollection = localStorage.getItem("id")
 console.log('docSnapData')
 
 const refrens = doc(db, "users", localNameCollection)
@@ -453,7 +410,7 @@ if (docSnapData.exists()) {
 let dmcc = document.querySelector(".input-file")
 let profileImg = document.querySelector("#fileInput");
 profileImg && profileImg.addEventListener("change", () => {
-    console.log(profileImg.files.name = `${localNameCollection.slice(0,4)}.png`)
+    console.log(profileImg.files.name = `${localNameCollection.slice(0, 4)}.png`)
     if (profileImg.files[0].type == "image/png" || profileImg.files[0].type == "image/jpeg") {
 
         let propicture = document.querySelector(".pro-img")
@@ -515,7 +472,6 @@ btnUpdate && btnUpdate.addEventListener("click", async () => {
             await updateDoc(washingtonRef, {
                 name: profileNameInput.value,
                 lastName: profileLastName.value,
-                // email: profileEmailInput.value,
                 country: profileCountryInput.value,
                 gender: dropdownGenderProfile.value,
                 birtday: profileBirthdayInput.value
@@ -530,20 +486,20 @@ btnUpdate && btnUpdate.addEventListener("click", async () => {
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        let  chatBtns = document.querySelectorAll(".chat-btn");
+        let chatBtns = document.querySelectorAll(".chat-btn");
         chatBtns.forEach(chatBtnsElement => {
-           chatBtnsElement.addEventListener("click",()=>{
-window.location.assign("chat.html")
-           })
+            chatBtnsElement.addEventListener("click", () => {
+                window.location.assign("chat.html")
+            })
         });
 
     } else {
         swal({
             title: "Please Login",
             icon: "error"
-          });
-          
-      console.log("sign out")
+        });
+
+        console.log("sign out")
     }
-  });
+});
 

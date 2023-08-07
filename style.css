@@ -4,6 +4,26 @@
     box-sizing: border-box;
 }
 
+.navbar {
+    background-color: #141b20;
+    position: fixed !important;
+    width: 100% !important;
+    top: 0;
+}
+
+.navbar-toggler-icon {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: auto !important;
+    color: #fff;
+}
+
+.navbar-nav {
+    display: flex !important;
+    justify-content: center !important;
+
+}
 
 .header {
     height: 70px;
@@ -14,6 +34,12 @@
     justify-content: space-around;
     align-items: center;
     top: 0;
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
 }
 
 .icon {
@@ -55,7 +81,7 @@
 }
 
 .first-container {
-    margin-top: 70px;
+    margin-top: 58px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -1091,7 +1117,7 @@ img.card-img-top {
 .messege-box {
     margin-top: 67px;
     position: absolute;
-    border: 1px solid #fff;
+    border: 1px solid #141b20;
     height: 78%;
     width: 79%;
     overflow: auto;
@@ -1102,7 +1128,7 @@ img.card-img-top {
 .messege {
     padding: 0px 11px;
     height: 25px;
-    /* background-color: #009688; */
+    background-color: #009688;
     display: inline-block;
 }
 
@@ -1110,8 +1136,6 @@ img.card-img-top {
     padding: 0px 11px;
     width: 100%;
     content: normal;
-    /* background-color: #009688; */
-
 }
 
 .resive-messege {
@@ -1128,6 +1152,40 @@ img.card-img-top {
     display: flex;
     justify-content: flex-end;
 }
-.messg-re{
+
+.messg-re {
     color: #000 !important;
+}
+
+.msg {
+    background-color: #1fafad;
+    margin-top: 3px;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+#receiver-msg {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.msg1 {
+    background-color: #009688;
+    margin-top: 3px;
+    padding: 4px;
+}
+
+@media only screen and (max-width: 750px) {
+    .user-img {
+        height: 38px;
+        width: 38px;
+
+    }
+
+}
+.spinner-chat{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
